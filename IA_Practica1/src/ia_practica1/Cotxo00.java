@@ -13,7 +13,7 @@ package agents;
 // Exemple de Cotxo molt bàsic
 
 
-public class Cotxo00 extends Agent {
+public class Cotxo1 extends Agent {
 
     static final boolean DEBUG = false;
 
@@ -23,16 +23,17 @@ public class Cotxo00 extends Agent {
     static final int COTXE = 1;
     
     int VELOCITATTOPE = 5;
-    int VELOCITATFRE = 3;
+    int VELOCITATFRE = 4;
 
     Estat estat;
     int espera = 0;
+    int esperaDisparos = 0;
 
     double desquerra, ddreta, dcentral;
 
 
-    public Cotxo00(Agents pare) {
-        super(pare, "CAR RT 0.1", "imatges/CocheAzul.png");
+    public Cotxo1(Agents pare) {
+        super(pare, "CAR RT 0.2", "imatges/Porsche911.png");
     }
 
     @Override
@@ -40,6 +41,7 @@ public class Cotxo00 extends Agent {
         setAngleVisors(40);
         setDistanciaVisors(350);
         setVelocitatAngular(9);
+        esperaDisparos = 150;
     }
 
     @Override
@@ -74,14 +76,14 @@ public class Cotxo00 extends Agent {
             desquerra = estat.distanciaVisors[ESQUERRA];
             dcentral = estat.distanciaVisors[CENTRAL];
 
-            if (dcentral > 170) {
-                endavant(VELOCITATTOPE);
-            }
-            
-            if (estat.objecteVisor[CENTRAL] == COTXE)
+            if (esperaDisparos > 0)
             {
+                esperaDisparos--;
+            } else if(estat.objecteVisor[CENTRAL] == COTXE && esperaDisparos == 0){
                 dispara();
+                esperaDisparos = 50;
             }
+
             //---------VELOCIDADES-----------------
             if ((desquerra > 40) && (ddreta > 40) && dcentral > 180 && estat.velocitat < 110){
                 endavant(1);
